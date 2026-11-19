@@ -1,0 +1,31 @@
+name: Auto 3 Daily Hindi Fact Reels
+
+on:
+  workflow_dispatch: # जब चाहें बटन दबाकर 3 Reels बनाएं
+  schedule:
+    - cron: '30 3 * * *' # रोज़ सुबह 9:00 AM IST पर अपने आप 3 Reels बनेंगी
+
+jobs:
+  create-reels:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        reel_number:
+    steps:
+      - name: कोड लोड करें
+        uses: actions/checkout@v4
+
+      - name: ज़रूरी टूल्स और हिंदी फ़ॉन्ट्स इंस्टॉल करें
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-noto-core
+          pip install edge-tts moviepy==1.0.3 deep-translator requests Pillow
+
+      - name: Reel #${{ matrix.reel_number }} बनाएं
+        run: python make_reel.py
+
+      - name: वीडियो डाउनलोड के लिए सेव करें
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-reel-${{ matrix.reel_number }}
+          path: daily_fact_reel.mp4
