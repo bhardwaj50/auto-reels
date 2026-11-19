@@ -12,7 +12,6 @@ from moviepy.editor import (
     CompositeAudioClip, concatenate_videoclips
 )
 
-# 1. इंटरनेट से नया फैक्ट उठाएं और हिंदी में बदलें
 def get_fact_sentences():
     try:
         res = requests.get("https://jsph.pl", timeout=10).json()
@@ -24,7 +23,6 @@ def get_fact_sentences():
     sentences = [s.strip() for s in re.split(r'(?<=[।?!.])\s+', full_text) if len(s.strip()) > 3]
     return sentences if sentences else [full_text]
 
-# 2. बिना किसी API Key के हर बार अलग फ्री HD फोटो डाउनलोड करें
 def fetch_visual_clip(index, duration):
     topics = ["space galaxy", "earth universe", "mysteries science", "nature mountains", "ocean deep", "stars night"]
     query = random.choice(topics)
@@ -53,7 +51,6 @@ def fetch_visual_clip(index, duration):
     Image.new("RGB", (1080, 1920), (15, 23, 42)).save(img_path)
     return ImageClip(img_path).set_duration(duration)
 
-# 3. हिंदी सबटाइटल लेयर बनाएं
 def make_subtitle_layer(text, duration):
     img = Image.new("RGBA", (1080, 1920), (0, 0, 0, 105))
     draw = ImageDraw.Draw(img)
@@ -64,7 +61,8 @@ def make_subtitle_layer(text, duration):
     y_text = 750
     for line in lines:
         bbox = draw.textbbox((0, 0), line, font=font)
-        x_text = (1080 - (bbox - bbox)) / 2
+        text_width = bbox - bbox
+        x_text = (1080 - text_width) / 2
         draw.text((x_text + 3, y_text + 3), line, font=font, fill=(0, 0, 0, 230))
         draw.text((x_text, y_text), line, font=font, fill=(255, 255, 255, 255))
         y_text += 85
@@ -73,7 +71,6 @@ def make_subtitle_layer(text, duration):
     img.save(sub_path)
     return ImageClip(sub_path).set_duration(duration)
 
-# 4. आवाज़ और वीडियो क्लिप्स जोड़ें
 async def build_all_scenes(sentences):
     voice = random.choice(["hi-IN-MadhurNeural", "hi-IN-SwaraNeural"])
     scenes = []
@@ -91,7 +88,6 @@ async def build_all_scenes(sentences):
         scenes.append(scene)
     return concatenate_videoclips(scenes, method="compose")
 
-# 5. फाइनल Reel बनाएं
 final_video = asyncio.run(build_all_scenes(get_fact_sentences()))
 
 if os.path.exists("music.mp3"):
