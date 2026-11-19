@@ -16,7 +16,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y ffmpeg fonts-noto-core
-          pip install edge-tts moviepy==1.0.3 deep-translator requests "Pillow<10"
+          pip install edge-tts moviepy==1.0.3 deep-translator requests Pillow
 
       - name: Generate Reel
         run: python make_reel.py
