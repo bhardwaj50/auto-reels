@@ -61,8 +61,8 @@ def make_subtitle_layer(text, duration):
     y_text = 750
     for line in lines:
         bbox = draw.textbbox((0, 0), line, font=font)
-        text_width = bbox - bbox
-        x_text = (1080 - text_width) / 2
+        text_width = bbox[2] - bbox[0]
+        x_text = 90
         draw.text((x_text + 3, y_text + 3), line, font=font, fill=(0, 0, 0, 230))
         draw.text((x_text, y_text), line, font=font, fill=(255, 255, 255, 255))
         y_text += 85
