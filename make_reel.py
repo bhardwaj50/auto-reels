@@ -57,7 +57,6 @@ def fetch_animated_visual(index, duration):
     clip = (
         ImageClip(img_path)
         .set_duration(duration)
-        .resize(lambda t: 1.0 + 0.08 * (t / max(duration, 1)))
         .set_position(("center", "center"))
     )
     return clip
